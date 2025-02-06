@@ -119,23 +119,18 @@ To make the most of this bootcamp and repository, follow these steps:
 
 **Contribution & Feedback:**
 
-[*(Optional Section - Include if you wish to allow contributions and feedback from learners or other instructors)*]
-
 We welcome contributions and feedback to improve this bootcamp repository. If you find any errors in the materials, have suggestions for improvements, or want to contribute additional exercises, examples, or notes, please feel free to open an issue or submit a pull request to this repository. Your contributions are valuable to making this resource even better for future learners.
 
 **License:**
-
-[*(Optional Section - Specify the license if you are using one. Example using MIT License)*]
 
 This repository is licensed under the MIT License. See the `LICENSE` file in the root of this repository for the full license text. You are free to use, modify, and distribute these materials for educational purposes, subject to the terms of the MIT License.
 
 **Contact:**
 
-[*(Optional Section - Include your name or contact information if you wish to provide it for learners to reach out with questions or feedback. Example)*]
-
 For any questions, feedback, or support related to this bootcamp or repository, please contact:
 
-[Your Name/Organization Name]
-[Your Email Address or Website (Optional)]
+Loordhu Jeyakumar
+loordhujeyakumar@gmail.com
+9600693684
 
 **Good luck and have a fantastic learning experience in the Python Full-Stack Web Development Bootcamp!**
