@@ -171,9 +171,18 @@ print(result)  # Output: 20
 
 #input function always returns a string
 
-num1 = input("Enter a number: ")
-num2 = input("Enter another number: ")
-opertaion = input("Enter an operation (+, -, *, /): ")
+num1_str = input("Enter the first number: ")
+num2_str = input("Enter the second number: ")
 
-result = eval(f"{num1} {opertaion} {num2}")
-print(result)
+num1 = float(num1_str) # Use float to handle decimal input
+num2 = float(num2_str)  
+sum_result = num1 + num2
+difference_result = num1 - num2
+product_result = num1 * num2
+quotient_result = num1 / num2
+print(f"Sum: {num1} + {num2} = {sum_result}")
+print(f"Difference: {num1} - {num2} = {difference_result}")
+print(f"Product: {num1} * {num2} = {product_result}")
+print(f"Quotient: {num1} / {num2} = {quotient_result}")
+# without f string
+print("Sum:", num1, "+", num2, "=", sum_result)
