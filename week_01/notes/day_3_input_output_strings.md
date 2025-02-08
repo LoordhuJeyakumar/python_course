@@ -275,59 +275,23 @@
 
 1.  **Greeting Message:** Write a program that takes the user's first name and last name as input separately and then prints a full greeting message like "Hello, [FirstName] [LastName]! Welcome!". Use f-strings for formatting.
 
-    ```python
-    # Exercise 1 Solution
-    first_name = input("Enter your first name: ")
-    last_name = input("Enter your last name: ")
 
-    print(f"Hello, {first_name} {last_name}! Welcome!")
-    ```
 
 2.  **String Length and First Character:** Ask the user to enter a string. Print the length of the string and its first character.
 
-    ```python
-    # Exercise 2 Solution
-    input_string = input("Enter a string: ")
-
-    string_length = len(input_string)
-    first_char = input_string[0]
-
-    print(f"Length of the string: {string_length}")
-    print(f"First character: {first_char}")
-    ```
+   
 
 3.  **Word Count:** Write a program that takes a sentence as input and counts the number of words in it. (Assume words are separated by spaces). Use the `split()` method.
 
-    ```python
-    # Exercise 3 Solution
-    sentence = input("Enter a sentence: ")
-    words = sentence.split() # Splits by whitespace by default
-    word_count = len(words)
-
-    print(f"Number of words in the sentence: {word_count}")
-    ```
+   
 
 4.  **Email Validation (Basic):** Ask the user to enter an email address. Check if the email address contains the "@" symbol and a "." symbol. Print "Valid Email" or "Invalid Email" based on this simple check. (Note: This is a very basic validation and not a complete email validation).
 
-    ```python
-    # Exercise 4 Solution
-    email = input("Enter your email address: ")
-
-    if "@" in email and "." in email:
-        print("Valid Email")
-    else:
-        print("Invalid Email")
-    ```
+    
 
 5.  **Reverse String:** Ask the user to enter a string. Print the reverse of the string using slicing.
 
-    ```python
-    # Exercise 5 Solution
-    text = input("Enter a string: ")
-    reversed_text = text[::-1]
-
-    print(f"Reversed string: {reversed_text}")
-    ```
+   
 
 ---
 
@@ -337,10 +301,3 @@
 
 Write a program that takes user's name and age as input and prints a formatted greeting message using f-strings.
 
-```python
-# Daily Simple Task Solution
-name = input("Enter your name: ")
-age_str = input("Enter your age: ")
-age = int(age_str) # Convert age to integer
-
-print(f"Hello, {name}! You are {age} years old.")
