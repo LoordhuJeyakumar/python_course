@@ -229,7 +229,7 @@ Please submit your Week 1 Assignment via GitHub using Pull Requests. Follow thes
 
 9.  **Deadline: [3 Days]**
 
-    - **Deadline:** Please submit your Week 1 Assignment by **Monday, [Date - next Monday] at 11:59 PM [Your Time Zone]**. **Submissions after this time will not be accepted.**
+    - **Deadline:** Please submit your Week 1 Assignment by **Monday, [Date - next Monday] at 11:59 PM**. **Submissions after this time will not be accepted.**
     - Given the fast-paced nature of the bootcamp and the 3-day submission window, we strongly advise you to **start working on the assignment early in the week and manage your time effectively.**
 
 10. **Seeking Assistance:**

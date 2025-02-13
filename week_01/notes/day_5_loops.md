@@ -2,7 +2,7 @@
 
 **Lesson Plan:**
 
-1.  **(Morning - 1.5 hours) Introduction to Loops (`for` loop and `while` loop) (Lecture & Demonstration)**
+1.  **Introduction to Loops (`for` loop and `while` loop)**
     - Recap of Day 4, Q\&A. Briefly review Conditional Statements. Address any questions learners might have from Day 4's topics and exercises.
     - Introduction to Loops: Why loops are essential in programming - automating repetitive tasks, iterating over data. Real-world examples (repeating actions, processing lists of items).
     - `for` loop: Iterating over sequences.
@@ -19,7 +19,7 @@
       - Need for loop control variables and how they are updated within the loop to control loop termination.
       - `while-else` block (optional but useful): Explain that `else` block in a `while` loop executes if the loop condition becomes `False` and loop terminates normally (not via `break`).
     - Examples and live coding in the IDE (VS Code/PyCharm) to demonstrate both `for` and `while` loops, `range()`, and loop structures. Emphasize correct indentation and loop control. Encourage learners to follow and modify the code.
-2.  **(Afternoon - 2 hours) Loop Control (`break`, `continue`) and Nested Loops (Hands-on & Exercises))**
+2.  **Loop Control (`break`, `continue`) and Nested Loops**
     - Loop control statements: `break` and `continue`.
       - `break` statement: Explain its purpose - immediately exit the loop (both `for` and `while`). Demonstrate scenarios where `break` is useful (e.g., searching for an item and stopping when found).
       - `continue` statement: Explain its purpose - skip the current iteration and move to the next iteration of the loop. Demonstrate scenarios where `continue` is useful (e.g., skipping processing certain items in a sequence based on a condition).
