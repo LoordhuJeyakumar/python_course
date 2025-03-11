@@ -1,3 +1,5 @@
 #ignore all files and folders in solutions folder
 
 solutions/
+
+*instructor_lesson_plan
