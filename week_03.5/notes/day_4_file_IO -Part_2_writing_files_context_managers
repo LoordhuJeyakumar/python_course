@@ -1,0 +1,507 @@
+# Day 4: File I/O - Part 2: Writing Files and Context Managers - Study Material & Notes
+
+## Recap of Day 3: File Reading
+
+Welcome to Day 4! Let's quickly recap what we learned yesterday about reading files in Python.
+
+*   **File Paths:** We discussed absolute and relative file paths for locating files in the file system. Relative paths are generally preferred for project portability.
+*   **`open()` Function (Read Modes):** We used `open(filename, mode, encoding=...)` to open files for reading. We focused on read modes:
+    *   `'r'` (read text mode) - default for text files.
+    *   `'rb'` (read binary mode) - for binary files.
+    *   We learned about the importance of the `encoding` argument for text files (UTF-8 is a good default).
+*   **Reading Methods:**
+    *   `read()`: Reads the entire file content.
+    *   `readline()`: Reads one line at a time.
+    *   `readlines()`: Reads all lines into a list.
+    *   Iteration (`for line in file:`): Efficient line-by-line reading for large files.
+*   **`close()` Method:** We emphasized the importance of closing files using `file.close()` to release resources.
+
+Today, we'll learn how to **write data to files** and discover a more elegant way to handle files using **context managers**.
+
+## 2. Writing to Files: Write and Append Modes
+
+Now, let's explore how to **write data to files** in Python.  Just like reading, writing also starts with the `open()` function, but this time, we'll use different **write modes**.
+
+**`open()` Function for Writing:**
+
+We still use the `open()` function, but we'll use different `mode` strings to specify that we want to write to the file:
+
+```python
+file_object = open(filename, mode, encoding=None)
+```
+
+The `filename` and `encoding` arguments work the same way as in read mode.  The key difference is the **`mode`** argument.
+
+**Write Modes for `open()` (Focus for Day 4):**
+
+Here are the common write modes we'll focus on today:
+
+| Mode String | Description                                                                                                    | File Type | Behavior if File Exists | Behavior if File Doesn't Exist |
+| :---------- | :------------------------------------------------------------------------------------------------------------- | :-------- | :------------------------ | :----------------------------- |
+| `'w'`       | **Write mode (text mode):** Opens a text file for writing.                                                    | Text      | **Overwrites** existing file | Creates a new file             |
+| `'wt'`      | **Write text mode:** Explicitly specifies text mode for writing (same as `'w'`).                                   | Text      | **Overwrites** existing file | Creates a new file             |
+| `'wb'`      | **Write binary mode:** Opens a binary file for writing.                                                        | Binary    | **Overwrites** existing file | Creates a new file             |
+| `'a'`       | **Append mode (text mode):** Opens a text file for appending.                                                  | Text      | Adds to the **end** of file  | Creates a new file             |
+| `'at'`      | **Append text mode:** Explicitly specifies text mode for appending (same as `'a'`).                                 | Text      | Adds to the **end** of file  | Creates a new file             |
+| `'ab'`      | **Append binary mode:** Opens a binary file for appending.                                                    | Binary    | Adds to the **end** of file  | Creates a new file             |
+| `'x'`       | **Exclusive creation mode (text mode):** Opens a text file for exclusive creation.                             | Text      | **Fails** (FileExistsError) | Creates a new file             |
+| `'xt'`      | **Exclusive creation text mode:** Explicitly for exclusive creation of a text file (same as `'x'`).              | Text      | **Fails** (FileExistsError) | Creates a new file             |
+| `'xb'`      | **Exclusive creation binary mode:** For exclusive creation of a binary file.                                 | Binary    | **Fails** (FileExistsError) | Creates a new file             |
+
+**Explanation of Write Modes:**
+
+*   **`'w'` or `'wt'` (Write Text Mode):**
+    *   Opens a file for writing **text data**.
+    *   **If the file already exists:**  **It will be overwritten!** The existing content of the file will be deleted, and a new empty file will be created in its place. Use this mode with caution if you don't want to lose existing data.
+    *   **If the file does not exist:** A new file will be created.
+    *   Data written to the file should be strings.
+    *   Use `encoding='utf-8'` (or appropriate encoding) for text files.
+
+*   **`'wb'` (Write Binary Mode):**
+    *   Opens a file for writing **binary data**.
+    *   **If the file already exists:** **It will be overwritten!**
+    *   **If the file does not exist:** A new file will be created.
+    *   Data written to the file should be bytes objects.
+    *   Do not use `encoding` argument in binary mode.
+
+*   **`'a'` or `'at'` (Append Text Mode):**
+    *   Opens a file for writing **text data in append mode**.
+    *   **If the file already exists:** The file is opened, and the writing position is set to the **end of the file**. Any data you write will be added to the end of the existing content. The original content is preserved.
+    *   **If the file does not exist:** A new file will be created.
+    *   Data written should be strings.
+    *   Use `encoding='utf-8'` (or appropriate encoding) for text files.
+
+*   **`'ab'` (Append Binary Mode):**
+    *   Opens a file for writing **binary data in append mode**.
+    *   **If the file already exists:**  Data will be appended to the end.
+    *   **If the file does not exist:** A new file will be created.
+    *   Data written should be bytes objects.
+    *   Do not use `encoding` argument in binary mode.
+
+*   **`'x'` or `'xt'` or `'xb'` (Exclusive Creation Mode):**
+    *   Opens a file for **exclusive creation**.
+    *   **If the file already exists:** The `open()` operation will **fail** and raise a `FileExistsError` exception. This mode is used to prevent accidentally overwriting an existing file.
+    *   **If the file does not exist:** A new file will be created for writing.
+    *   Text or binary mode variations (`'xt'`, `'xb'`) determine if it's for text or binary data.
+
+**Choosing the Right Write Mode:**
+
+*   Use **`'w'` (write mode)** when you want to **create a new file** or **completely replace the content** of an existing file. Be careful with this mode as it will erase existing data!
+*   Use **`'a'` (append mode)** when you want to **add new data to the end of an existing file** or create a new file if it doesn't exist, while preserving any existing content. This is useful for logging, adding data to datasets, etc.
+*   Use **`'x'` (exclusive creation mode)** when you specifically want to **create a new file**, and you want to ensure that you don't accidentally overwrite an existing file. This is useful when you need to be certain you are creating a new file and not modifying an old one.
+
+**Example: Opening a Text File in Write Mode (`'w'`)**
+
+```python
+try:
+    file = open("output.txt", 'w', encoding='utf-8') # Open in write text mode, UTF-8 encoding
+    file.write("This is the first line.\n")
+    file.write("This is the second line.\n")
+    print("Data written to 'output.txt'")
+except Exception as e:
+    print(f"An error occurred: {e}")
+finally:
+    if 'file' in locals() and not file.closed:
+        file.close()
+```
+
+This code will create a file named "output.txt" (or overwrite it if it already exists) and write two lines of text into it.
+
+**Example: Opening a Text File in Append Mode (`'a'`)**
+
+```python
+try:
+    file = open("log.txt", 'a', encoding='utf-8') # Open in append text mode, UTF-8 encoding
+    file.write(f"Log entry at: ... (timestamp) ...\n") # Append a new log entry
+    print("Log entry appended to 'log.txt'")
+except Exception as e:
+    print(f"An error occurred: {e}")
+finally:
+    if 'file' in locals() and not file.closed:
+        file.close()
+```
+
+This code will open "log.txt" in append mode. If the file exists, it will add a new log entry to the end. If it doesn't exist, it will create a new "log.txt" file and add the entry.
+
+## 3. Writing Methods: `write()` and `writelines()`
+
+Once you have opened a file in a write mode (`'w'`, `'a'`, etc.), you can use methods to write data to it. The primary methods for writing are `write()` and `writelines()`.
+
+### 3.1. `write()` Method
+
+*   **Purpose:** The `write()` method writes a **single string** (if in text mode) or a **single bytes object** (if in binary mode) to the file at the current writing position.
+
+*   **Syntax:**
+
+    ```python
+    file.write(data)
+    ```
+
+    *   `data`:  The string (text mode) or bytes object (binary mode) you want to write to the file.
+
+*   **Example (Writing text using `write()`):**
+
+    ```python
+    try:
+        file = open("poem.txt", 'w', encoding='utf-8')
+        file.write("The Road Not Taken\n") # Write first line, include newline
+        file.write("By Robert Frost\n\n")    # Write second line, and a blank line
+        file.write("Two roads diverged in a yellow wood,\n") # Write another line
+        # ... more lines ...
+        print("Poem written to 'poem.txt'")
+    finally:
+        file.close()
+    ```
+
+    **Important:**
+    *   **Newline Characters:**  In text mode, the `write()` method does **not automatically add newline characters** at the end of what you write. If you want to write text on separate lines, you must explicitly include the newline character `\n` at the end of each string you write.
+
+*   **Example (Writing binary data using `write()` - conceptual):**
+
+    ```python
+    binary_data = b'\x48\x65\x6c\x6c\x6f\x2c\x20\x77\x6f\x72\x6c\x64\x21' # Bytes representing "Hello, world!"
+    try:
+        file = open("binary_output.bin", 'wb') # Open in write binary mode
+        file.write(binary_data) # Write bytes object
+        print("Binary data written to 'binary_output.bin'")
+    finally:
+        file.close()
+    ```
+
+### 3.2. `writelines()` Method
+
+*   **Purpose:** The `writelines()` method writes a **list of strings** (or a list of bytes objects in binary mode) to the file. It writes each item in the list sequentially to the file.
+
+*   **Syntax:**
+
+    ```python
+    file.writelines(list_of_lines)
+    ```
+
+    *   `list_of_lines`: A list where each item is a string (text mode) or a bytes object (binary mode) that you want to write to the file.
+
+*   **Example (Writing multiple lines using `writelines()`):**
+
+    ```python
+    lines_to_write = [
+        "Line 1: This is the first line.\n",
+        "Line 2: Here's the second line.\n",
+        "Line 3: And this is the last one.\n"
+    ]
+    try:
+        file = open("multi_line_output.txt", 'w', encoding='utf-8')
+        file.writelines(lines_to_write) # Write all lines from the list
+        print("Multiple lines written to 'multi_line_output.txt'")
+    finally:
+        file.close()
+    ```
+
+    **Important:**
+    *   **Newline Characters:**  Like `write()`, `writelines()` also **does not automatically add newline characters** between the strings in the list. If you want each string in the list to be on a separate line in the output file, you must ensure that each string in your list **already ends with a newline character `\n`**.
+
+*   **Example (Writing lines without automatic newlines - be aware):**
+
+    ```python
+    lines_no_newline = ["First part", "Second part", "Third part"] # No newlines at the end
+    try:
+        file = open("no_newlines.txt", 'w', encoding='utf-8')
+        file.writelines(lines_no_newline) # Write lines without newlines
+        print("Lines written to 'no_newlines.txt' (without newlines)")
+    finally:
+        file.close()
+    ```
+
+    In this case, the content of "no_newlines.txt" will be: `First partSecond partThird part` (all on a single line).
+
+## 4. Appending vs. Overwriting (Clarification)
+
+It's crucial to understand the difference between **overwriting** (using write mode `'w'`) and **appending** (using append mode `'a'`).
+
+**Overwriting (Write Mode `'w'`):**
+
+*   When you open a file in write mode (`'w'`), and if the file **already exists**, the existing content is **completely erased** and replaced with a new empty file. Any data you write will be written to this new empty file.
+*   If the file **does not exist**, a new file is created, and data is written to it.
+
+**Example of Overwriting:**
+
+```python
+# Assume 'my_notes.txt' already exists with some content
+
+try:
+    file = open("my_notes.txt", 'w', encoding='utf-8') # Open in write mode
+    file.write("This is completely new content.\n") # Write new content
+    print("'my_notes.txt' overwritten with new content.")
+finally:
+    file.close()
+
+# After running this, the original content of 'my_notes.txt' is GONE, replaced by "This is completely new content."
+```
+
+**Appending (Append Mode `'a'`):**
+
+*   When you open a file in append mode (`'a'`), and if the file **already exists**, the file is opened, and the writing position is set to the **end of the file**. Any data you write will be added to the end of the existing content. The original content is preserved.
+*   If the file **does not exist**, a new file is created, and data is written to it (starting from the beginning of the new file, just like in write mode).
+
+**Example of Appending:**
+
+```python
+# Assume 'log_file.txt' exists with some log entries
+
+try:
+    file = open("log_file.txt", 'a', encoding='utf-8') # Open in append mode
+    file.write("New log entry at ... (timestamp) ...\n") # Append a new log entry
+    file.write("Another log entry ...\n")
+    print("New log entries appended to 'log_file.txt'")
+finally:
+    file.close()
+
+# After running this, the original content of 'log_file.txt' is still there, and the new log entries are added at the end.
+```
+
+**When to Use Which Mode:**
+
+*   **Use write mode (`'w'`) when:**
+    *   You are creating a new file from scratch and writing initial content into it.
+    *   You explicitly want to replace the entire content of an existing file with new content.
+    *   You are generating a new output file based on some processing, and you don't need to keep the old content.
+
+*   **Use append mode (`'a'`) when:**
+    *   You want to add data to an existing file without deleting its current content (e.g., for log files, data collection files where you keep adding new records).
+    *   You want to create a file if it doesn't exist and start writing to it, but if it does exist, you want to add to it.
+
+**Be very careful when using write mode (`'w'`)**, especially if you are working with files that might contain important data. Always double-check if you intend to overwrite or append! If you are unsure, append mode (`'a'`) is often a safer choice as it avoids accidental data loss.
+
+## 5. Introduction to Context Managers: `with open(...) as f:`
+
+As we discussed yesterday, it's essential to close files after you are done with them using `file.close()`. However, manually calling `close()` can be error-prone. If an exception occurs in your code *before* you reach the `file.close()` line, the file might not be closed properly, leading to potential resource leaks or data corruption.
+
+Python provides a more elegant and robust way to handle files using **context managers** and the `with` statement.
+
+**Context Managers and the `with` Statement:**
+
+The `with open(...) as file_object:` statement is a context manager for file operations. It ensures that the file is **automatically closed** when you are finished with it, even if errors occur within the `with` block.
+
+**Syntax:**
+
+```python
+with open(filename, mode, encoding=...) as file_object:
+    # Code block to work with the file (read or write operations)
+    # ... operations using file_object ...
+# File is automatically closed when you exit the 'with' block (indentation ends)
+```
+
+**How it Works:**
+
+1.  **`open(filename, mode, encoding=...)`:**  The `open()` function is called to open the file in the specified mode and encoding.
+2.  **`as file_object`:** The file object returned by `open()` is assigned to the variable `file_object` (you can choose any valid variable name).
+3.  **`with` block:** The code that you want to execute while working with the file is placed inside the indented `with` block.
+4.  **Automatic Closing:** When the `with` block is finished (either by reaching the end of the block or if an exception occurs within the block), Python **automatically closes the file** for you. You do not need to call `file_object.close()` explicitly.
+
+**Benefits of Using `with open(...)`:**
+
+*   **Automatic File Closing:**  The most significant advantage is automatic file closing. You don't have to worry about forgetting to call `close()`. Python guarantees that the file will be closed, even if exceptions are raised within the `with` block. This prevents resource leaks and data corruption.
+*   **Cleaner and More Readable Code:**  Using `with open()` makes your code cleaner and easier to read because the file opening and closing are handled implicitly by the `with` statement. You can focus on the file operations within the block.
+*   **Exception Safety:**  Even if an error occurs while you are working with the file inside the `with` block (e.g., an `IOError`, `UnicodeEncodeError`, etc.), the `with` statement ensures that the file is still properly closed before the exception is propagated.
+
+**Example: Reading a File Using `with open()`**
+
+```python
+try:
+    with open("my_data.txt", 'r', encoding='utf-8') as file: # Open file using 'with'
+        content = file.read() # Read content within the 'with' block
+        print("--- File Content (using 'with') ---")
+        print(content)
+        print("--- End of Content ---")
+    # File is automatically closed here when exiting 'with' block
+    print("File has been automatically closed.")
+except FileNotFoundError:
+    print("Error: File not found!")
+except Exception as e:
+    print(f"An error occurred: {e}")
+```
+
+**Example: Writing to a File Using `with open()`**
+
+```python
+try:
+    with open("output_file.txt", 'w', encoding='utf-8') as file: # Open in write mode using 'with'
+        file.write("Data written using context manager.\n")
+        file.write("This is more robust file handling.\n")
+    # File is automatically closed here
+    print("'output_file.txt' written using 'with' statement.")
+except Exception as e:
+    print(f"An error occurred: {e}")
+```
+
+**Best Practice: Always Use `with open(...)` for File I/O**
+
+Using `with open(...) as f:` is the **recommended best practice** for file I/O in Python. It simplifies file handling, makes your code more robust, and reduces the risk of common file-related errors.  From now on, you should aim to use `with open(...)` whenever you work with files in Python, for both reading and writing operations.
+
+## Summary of Day 4: File I/O - Part 2
+
+Today, we've expanded our knowledge of File I/O by learning about:
+
+*   **Write Modes:**  `'w'`, `'wb'`, `'a'`, `'ab'`, `'x'`, `'xb'`, `'xt'` and their behavior for creating, overwriting, and appending to files.
+*   **Writing Methods:** `write()` for writing strings/bytes and `writelines()` for writing lists of strings/bytes.
+*   **Appending vs. Overwriting:** Understanding the critical difference between write mode (overwrites) and append mode (adds to the end).
+*   **Context Managers (`with open(...) as f:`):**  The `with` statement and context managers for automatic file closing, cleaner code, and exception safety.  **This is the recommended way to handle files in Python.**
+
+You now have the fundamental skills to both read from and write to files in Python, and you know how to handle files safely and efficiently using context managers!
+
+## Exercises
+
+**Exercise 1: Simple File Writer**
+
+1.  **Write a Python script** that:
+    *   Asks the user to enter a filename for output.
+    *   Opens the file in **write text mode** (`'w'`, with `encoding='utf-8'`) using a `with open(...)` statement.
+    *   Prompts the user to enter lines of text, one line at a time.
+    *   After each line is entered, write that line to the file, followed by a newline character `\n`.
+    *   Continue prompting for lines until the user enters a specific command (e.g., "done", "finish", or just an empty line).
+    *   Once the user is done, close the file (which will happen automatically with `with open()`).
+    *   Print a message confirming that the data has been written to the file.
+    *   Include basic error handling (e.g., for potential `IOError` during writing).
+
+**Exercise 2: Log File Appender**
+
+1.  **Write a Python script** that:
+    *   Asks the user to enter a filename for a log file (e.g., "app_log.txt").
+    *   Opens the file in **append text mode** (`'a'`, with `encoding='utf-8'`) using `with open(...)`.
+    *   Prompts the user to enter a log message.
+    *   Writes the current date and time, followed by the log message, to the file.  You can use the `datetime` module to get the current date and time (e.g., `datetime.datetime.now()`). Format the date and time nicely in your log entry.
+    *   After writing the log entry, print a confirmation message to the console.
+    *   The script should run in a loop, allowing the user to enter multiple log messages until they choose to exit (e.g., by entering "exit" or "quit").
+    *   Close the file when the user exits (automatically closed by `with`).
+    *   Include error handling for potential `IOError`.
+
+**Exercise 3: Exclusive File Creation**
+
+1.  **Write a Python script** that:
+    *   Asks the user to enter a filename to create.
+    *   Attempts to open the file in **exclusive creation text mode** (`'x'`, with `encoding='utf-8'`) using `with open(...)`.
+    *   If the file is successfully created (i.e., no `FileExistsError` is raised):
+        *   Print a message confirming that the file was created successfully.
+        *   Write a single line of text to the file (e.g., "This is a newly created file.").
+    *   If a `FileExistsError` is raised (meaning the file already exists):
+        *   Catch the `FileExistsError` exception.
+        *   Print an error message indicating that the file already exists and could not be created in exclusive mode.
+    *   The file should be automatically closed in both cases (success or exception) due to `with open()`.
+
+**Self-Check Questions (Optional):**
+
+*   What are the different write modes in Python (`'w'`, `'a'`, `'x'`) and how do they behave when a file exists or doesn't exist? When would you use each mode?
+*   Explain the difference between the `write()` and `writelines()` methods. Do they automatically add newline characters?
+*   What is a context manager in Python, and how does `with open(...) as f:` use it for file handling?
+*   What are the benefits of using `with open(...)` compared to manually calling `file.open()` and `file.close()`?
+*   When would you use binary write modes (`'wb'`, `'ab'`, `'xb'`) instead of text write modes (`'w'`, `'a'`, `'x'`)?
+
+## Daily Task
+
+**Task: Copy File Content (Text File)**
+
+Write a Python script that:
+
+1.  Asks the user to enter the name of a **source file** (the file to copy from).
+2.  Asks the user to enter the name of a **destination file** (the file to copy to).
+3.  Opens the **source file** in **read text mode** (`'r'`, encoding='utf-8') using `with open(...)`.
+4.  Opens the **destination file** in **write text mode** (`'w'`, encoding='utf-8') using another `with open(...)`.
+5.  Reads the entire content of the source file using `read()`.
+6.  Writes the content read from the source file to the destination file using `write()`.
+7.  Both files should be automatically closed when exiting the `with` blocks.
+8.  Print a message confirming that the content has been copied from the source to the destination file.
+9.  Include error handling for `FileNotFoundError` (if the source file doesn't exist) and potential `IOError` during reading or writing.
+
+---
+
+## Solutions to Exercises and Daily Task
+
+<details>
+<summary><b>Solution for Exercise 1: Simple File Writer</b></summary>
+
+```python
+output_filename = input("Enter filename for output: ")
+
+try:
+    with open(output_filename, 'w', encoding='utf-8') as file:
+        print("Enter lines of text to write to the file. Type 'done' or an empty line to finish.")
+        while True:
+            line = input("> ")
+            if line.lower() == 'done' or line == '':
+                break
+            file.write(line + '\n') # Write line and newline
+    print(f"Data successfully written to '{output_filename}'")
+except IOError as e:
+    print(f"An I/O error occurred: {e}")
+```
+
+</details>
+
+<details>
+<summary><b>Solution for Exercise 2: Log File Appender</b></summary>
+
+```python
+import datetime
+
+log_filename = input("Enter log filename (e.g., app_log.txt): ")
+
+try:
+    with open(log_filename, 'a', encoding='utf-8') as logfile:
+        print("Enter log messages. Type 'exit' or 'quit' to stop.")
+        while True:
+            message = input("Log message: ")
+            if message.lower() in ['exit', 'quit']:
+                break
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") # Format timestamp
+            log_entry = f"[{timestamp}] - {message}\n"
+            logfile.write(log_entry)
+            print("Log entry added.")
+    print(f"Logging to '{log_filename}' finished.")
+except IOError as e:
+    print(f"An I/O error occurred: {e}")
+```
+
+</details>
+
+<details>
+<summary><b>Solution for Exercise 3: Exclusive File Creation</b></summary>
+
+```python
+filename_to_create = input("Enter filename to create (exclusive mode): ")
+
+try:
+    with open(filename_to_create, 'x', encoding='utf-8') as new_file:
+        new_file.write("This is a newly created file in exclusive mode.\n")
+        print(f"File '{filename_to_create}' created successfully in exclusive mode.")
+except FileExistsError:
+    print(f"Error: File '{filename_to_create}' already exists. Cannot create in exclusive mode.")
+except IOError as e:
+    print(f"An I/O error occurred: {e}")
+```
+
+</details>
+
+<details>
+<summary><b>Solution for Daily Task: Copy File Content (Text File)</b></summary>
+
+```python
+source_filename = input("Enter source filename: ")
+destination_filename = input("Enter destination filename: ")
+
+try:
+    with open(source_filename, 'r', encoding='utf-8') as source_file:
+        with open(destination_filename, 'w', encoding='utf-8') as dest_file:
+            content_to_copy = source_file.read() # Read all content from source
+            dest_file.write(content_to_copy)     # Write to destination
+    print(f"Content copied from '{source_filename}' to '{destination_filename}' successfully.")
+except FileNotFoundError:
+    print(f"Error: Source file '{source_filename}' not found.")
+except IOError as e:
+    print(f"An I/O error occurred: {e}")
+```
+
+</details>
+
+---
+
+**End of Day 4 Study Material & Notes**
+```
