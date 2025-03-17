@@ -1,0 +1,448 @@
+# Day 1: Web Fundamentals and Introduction to HTTP - Study Material & Notes
+
+## Introduction to Web Fundamentals
+
+Welcome to Week 4, Day 1! Today, we're diving into the foundational concepts that power the internet and the World Wide Web. Understanding these fundamentals is crucial as we move forward with backend web development using Django.
+
+**Today's Topics:**
+
+- Web fundamentals: HTTP, client-server model
+- Introduction to the Internet and the World Wide Web
+- Understanding URLs, Domains, and DNS
+- The Client-Server Model: Browsers and Web Servers
+- Introduction to HTTP: Requests and Responses
+- HTTP Methods: GET and POST (brief overview)
+- Deep Dive into HTTP Request/Response Cycle
+- Exploring HTTP Headers and Status Codes
+- Hands-on: Using Browser Developer Tools to Inspect HTTP Requests/Responses
+- Introduction to HTML, CSS, and JavaScript (brief overview of their roles in web development)
+
+Let's begin our journey into the exciting world of the web!
+
+## 1. Web Fundamentals: HTTP and the Client-Server Model
+
+At its core, the way we interact with websites and web applications relies on a fundamental architecture known as the **client-server model**. This model dictates how different computers communicate with each other over a network. The primary protocol that governs this communication on the World Wide Web is the **Hypertext Transfer Protocol (HTTP)**.
+
+### 1.1. The Client-Server Model
+
+The client-server model is a distributed application structure that partitions tasks or workloads between service providers (servers) and service requesters (clients).
+
+- **Client:** A client is typically a software application (like a web browser) running on a user's device (computer, smartphone, tablet). The client initiates communication by sending a **request** for information or a service to the server.
+- **Server:** A server is a computer or a software application that provides resources or services to one or more clients. Web servers host website files and respond to requests from web browsers.
+
+Think of it like ordering food at a restaurant: you (the client) place an order (the request) with the waiter (who acts as an intermediary), and the kitchen (the server) prepares and delivers your food (the response).
+
+### 1.2. Hypertext Transfer Protocol (HTTP)
+
+**HTTP** is the communication protocol used for transferring files (like web pages, images, videos, etc.) on the World Wide Web. It defines a set of rules for how clients and servers should interact.
+
+- HTTP is based on the **request-response paradigm**. A client sends an HTTP request to a server, and the server sends back an HTTP response.
+- HTTP is a **stateless protocol**, meaning that each request from a client to a server is treated as an independent transaction. The server does not retain any information about previous requests from the same client. (While HTTP itself is stateless, technologies like cookies and sessions are used to maintain state in web applications.)
+
+## 2. Introduction to the Internet and the World Wide Web
+
+While often used interchangeably, the Internet and the World Wide Web are distinct concepts:
+
+- **The Internet:** The Internet is a vast global network of interconnected computer networks. It's the physical infrastructure that allows computers all over the world to communicate with each other using a common set of protocols, primarily the **Internet Protocol Suite (TCP/IP)**. Think of the Internet as the network of roads and highways connecting different cities.
+
+- **The World Wide Web (WWW):** The World Wide Web is an information system built on top of the Internet. It consists of interconnected documents (web pages) and other resources, linked by **hyperlinks** and identified by **URLs**. These resources are accessed via the Internet using web browsers. Think of the World Wide Web as the cars, buses, and destinations you find on those roads.
+
+In essence, the Internet is the underlying technology that makes the World Wide Web possible.
+
+## 3. Understanding URLs, Domains, and DNS
+
+To navigate the World Wide Web, we use web addresses. Let's break down the key components of these addresses:
+
+### 3.1. URL (Uniform Resource Locator)
+
+A **URL** is a unique address that specifies the location of a resource on the internet. It tells your browser exactly where to find a specific web page, image, or other file. A typical URL has the following structure:
+
+```
+protocol://hostname:port/path?query#fragment
+```
+
+Let's break down the common parts:
+
+- **Protocol:** (`https://` or `http://`) Specifies the communication protocol to be used. `HTTPS` indicates a secure connection using SSL/TLS.
+- **Hostname (or Domain Name):** (`www.example.com`) Identifies the server hosting the resource.
+- **Port (optional):** (`:80` or `:443`) Specifies the network port number on the server to connect to. For HTTP, the default port is 80, and for HTTPS, it's 443, so these are often omitted.
+- **Path:** (`/about`) Specifies the location of the specific resource on the server's file system.
+- **Query (optional):** (`?name=value&another=value`) Provides additional parameters to the server, often used in web applications (e.g., for search queries or passing data in a GET request).
+- **Fragment (optional):** (`#section`) Identifies a specific part or section within the resource (e.g., a specific heading on a web page).
+
+### 3.2. Domain Name
+
+A **domain name** is a human-readable name that identifies a website. It's easier for us to remember `google.com` than the server's numerical IP address. Domain names are part of the URL's hostname.
+
+- **Top-Level Domain (TLD):** The last part of the domain name (e.g., `.com`, `.org`, `.net`, `.in`, `.edu`). TLDs can be generic (like `.com`) or country-specific (like `.in` for India).
+- **Second-Level Domain:** The part before the TLD (e.g., `example` in `example.com`). This is the unique identifier you register.
+- **Subdomain (optional):** A part before the second-level domain (e.g., `www` in `www.example.com` or `blog` in `blog.example.com`). Subdomains can be used to organize different sections of a website.
+
+### 3.3. DNS (Domain Name System)
+
+When you type a domain name into your browser, your computer needs to find the actual server that hosts the website. This is where the **Domain Name System (DNS)** comes in.
+
+- DNS is a hierarchical and distributed naming system for computers, services, or any resource connected to the Internet or a private network.
+- Think of DNS as a phonebook for the internet. When you enter a domain name, your computer sends a request to a DNS server. The DNS server looks up the domain name and returns the corresponding **IP address** of the server.
+- An **IP address** (Internet Protocol address) is a numerical label assigned to each device connected to a computer network that uses the Internet Protocol for communication. It's how computers actually identify and locate each other on the network.
+
+The process works something like this:
+
+1.  You type `www.example.com` into your browser.
+2.  Your browser asks your computer's configured DNS server for the IP address of `www.example.com`.
+3.  The DNS server (or a series of DNS servers) looks up the IP address associated with that domain name.
+4.  The DNS server returns the IP address (e.g., `93.184.216.34`) to your computer.
+5.  Your browser then uses this IP address to connect to the actual web server hosting `www.example.com`.
+
+## 4. The Client-Server Model: Browsers and Web Servers in Action
+
+Now, let's see how the client-server model works in the context of web Browse:
+
+- **Web Browsers (Clients):** When you want to access a website, you use a web browser (like Chrome, Firefox, Safari, Edge). The browser acts as a client. You enter a URL, and the browser:
+
+  1.  Uses DNS to find the IP address of the server associated with the domain name in the URL.
+  2.  Establishes a connection with that server.
+  3.  Sends an **HTTP request** to the server, asking for the resource specified in the URL (e.g., the HTML file for the homepage).
+  4.  Receives the **HTTP response** from the server, which contains the requested content (e.g., the HTML code).
+  5.  Renders the content (interprets the HTML, applies CSS styles, and executes JavaScript) to display the web page to you.
+
+- **Web Servers (Servers):** A web server is a software application (like Apache, Nginx, Microsoft IIS, or Django's built-in development server) that runs on a computer connected to the internet. When a web server receives an HTTP request from a client:
+  1.  It processes the request, which might involve retrieving files from its file system, running server-side code, or accessing a database.
+  2.  It prepares an **HTTP response** that contains the requested content (or an error message if the resource cannot be found).
+  3.  It sends the HTTP response back to the client (the browser).
+
+## 5. Introduction to HTTP: Requests and Responses in Detail
+
+Let's take a closer look at the structure of HTTP requests and responses:
+
+### 5.1. HTTP Request
+
+An HTTP request is a message sent by the client (browser) to the server. It tells the server what the client wants to do. A basic HTTP request consists of:
+
+- **HTTP Method (or Verb):** Indicates the action the client wants the server to perform on the resource identified by the URL. Common methods include GET, POST, PUT, DELETE, etc.
+- **URL (or Path):** Specifies the resource on the server that the client is interested in.
+- **HTTP Version:** Indicates the version of the HTTP protocol being used (e.g., HTTP/1.1, HTTP/2).
+- **Headers:** Provide additional information about the request, such as the type of browser making the request, the content types the client can understand, authentication information, etc. Headers are key-value pairs.
+- **Body (optional):** Contains data being sent to the server, often used with methods like POST (e.g., form data, JSON data).
+
+### 5.2. HTTP Response
+
+An HTTP response is a message sent by the server back to the client after receiving and processing an HTTP request. It contains the information the client was asking for, or an indication that the request could not be fulfilled. A basic HTTP response consists of:
+
+- **HTTP Version:** Indicates the version of the HTTP protocol being used.
+- **Status Code:** A three-digit code that indicates the outcome of the server's attempt to understand and process the request (e.g., 200 for success, 404 for not found).
+- **Reason Phrase:** A short human-readable description of the status code (e.g., "OK" for 200, "Not Found" for 404).
+- **Headers:** Provide additional information about the response, such as the type of content being sent, the server software being used, how long the content can be cached, etc. Headers are key-value pairs.
+- **Body (optional):** Contains the actual content requested by the client (e.g., the HTML document for a web page, an image file, JSON data).
+
+## 6. HTTP Methods: GET and POST (Brief Overview)
+
+Let's focus on the two most commonly used HTTP methods:
+
+- **GET:**
+
+  - Used to **request data** from the server.
+  - When you type a URL into your browser and press Enter, the browser typically sends a GET request to retrieve the web page.
+  - GET requests are meant to be **read-only** and should not have any side effects on the server (they should not modify any data).
+  - Data in a GET request is often passed in the URL as **query parameters** (the part after the `?`).
+  - GET requests can be bookmarked and cached by browsers.
+
+- **POST:**
+  - Used to **send data to the server** to create or update a resource.
+  - When you submit a form on a website (e.g., a login form or a comment form), the browser often sends a POST request with the form data in the **request body**.
+  - POST requests can have **side effects** on the server (they can modify data, like creating a new user account or submitting a comment).
+  - Data in a POST request is usually sent in the **request body**, which is not visible in the URL.
+  - POST requests are generally not bookmarked or cached by browsers (without explicit instructions).
+
+We will encounter other HTTP methods like PUT, DELETE, etc., as we progress, especially when we discuss building APIs.
+
+## 7. Deep Dive into HTTP Request/Response Cycle
+
+Let's walk through a more detailed example of the HTTP request/response cycle:
+
+1.  **User wants to view the homepage of a website, `www.example-site.com`.**
+2.  **Browser (Client) initiates:**
+
+    - Looks up the IP address of `www.example-site.com` using DNS.
+    - Establishes a TCP connection with the server at that IP address on port 80 (for HTTP) or 443 (for HTTPS).
+    - Constructs an **HTTP GET request** for the homepage (typically the path `/`). The request might look something like this (simplified):
+
+      ```
+      GET / HTTP/1.1
+      Host: www.example-site.com
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...
+      Accept: text/html,application/xhtml+xml,...
+      ```
+
+3.  **Web Server (Server) processes:**
+
+    - Receives the HTTP GET request.
+    - Looks for the file or resource associated with the path `/` (often an `index.html` file).
+    - Retrieves the content of the `index.html` file.
+    - Constructs an **HTTP response**. The response might look something like this (simplified):
+
+      ```
+      HTTP/1.1 200 OK
+      Date: Mon, 17 Mar 2025 07:33:53 GMT
+      Server: Apache/2.4.51 (Unix)
+      Content-Type: text/html; charset=UTF-8
+      Content-Length: 12345
+
+      <!DOCTYPE html>
+      <html>
+      <head>
+          <title>Example Site</title>
+          ...
+      </head>
+      <body>
+          <h1>Welcome to Example Site!</h1>
+          ...
+      </body>
+      </html>
+      ```
+
+4.  **Browser (Client) receives and renders:**
+    - Receives the HTTP response.
+    - Checks the **status code** (200 OK indicates success).
+    - Reads the **headers**, such as `Content-Type` to understand the type of data in the body.
+    - Parses the **response body**, which in this case is the HTML code for the homepage.
+    - Renders the HTML content on the user's screen. If the HTML references other resources (like CSS files, images, JavaScript files), the browser will make separate HTTP requests for those as well, following a similar cycle.
+
+## 8. Exploring HTTP Headers and Status Codes
+
+HTTP headers and status codes provide crucial information about the request and the response.
+
+### 8.1. HTTP Headers
+
+HTTP headers are key-value pairs that provide additional context and instructions for both requests and responses. They allow clients and servers to exchange information beyond the main request line and response status line.
+
+**Common Request Headers:**
+
+- `Host`: Specifies the domain name of the server being requested.
+- `User-Agent`: Identifies the client software (e.g., browser name and version).
+- `Accept`: Indicates the content types the client is willing to accept in the response (e.g., `text/html`, `application/json`).
+- `Accept-Language`: Specifies the preferred languages for the response.
+- `Content-Type`: For requests with a body (like POST), specifies the media type of the body (e.g., `application/x-www-form-urlencoded` for form data, `application/json`).
+- `Cookie`: Contains cookies that the client has stored for the requested domain.
+
+**Common Response Headers:**
+
+- `Date`: The date and time that the response was generated by the server.
+- `Server`: Identifies the software used by the server (e.g., Apache, Nginx).
+- `Content-Type`: Specifies the media type of the response body (e.g., `text/html`, `image/jpeg`, `application/json`).
+- `Content-Length`: Indicates the size of the response body in bytes.
+- `Set-Cookie`: Instructs the client to store a cookie.
+- `Cache-Control`: Specifies directives for caching the response.
+
+### 8.2. HTTP Status Codes
+
+HTTP status codes are three-digit numbers that indicate the outcome of the server's attempt to understand and process the client's request. The first digit of the status code defines the class of response:
+
+- **1xx (Informational):** The request was received and is being processed.
+- **2xx (Successful):** The request was successfully received, understood, and accepted.
+  - **200 OK:** The standard response for successful HTTP requests.
+- **3xx (Redirection):** Further action needs to be taken by the client to fulfill the request.
+  - **301 Moved Permanently:** The requested resource has been permanently moved to a new URL.
+  - **302 Found (or Moved Temporarily):** The requested resource resides temporarily under a different URL.
+- **4xx (Client Error):** The request contains bad syntax or cannot be fulfilled.
+  - **400 Bad Request:** The server could not understand the request due to invalid syntax.
+  - **401 Unauthorized:** Authentication is required and has failed or has not yet been provided.
+  - **403 Forbidden:** The server understood the request but refuses to authorize it.
+  - **404 Not Found:** The server could not find the requested resource.
+- **5xx (Server Error):** The server failed to fulfill a valid request.
+  - **500 Internal Server Error:** A generic error message, given when an unexpected condition was encountered.
+  - **503 Service Unavailable:** The server is currently unavailable (e.g., due to being overloaded or down for maintenance).
+
+Understanding these status codes is essential for debugging web applications and understanding how servers are responding to client requests.
+
+## 9. Hands-on: Using Browser Developer Tools to Inspect HTTP Requests/Responses
+
+The best way to solidify your understanding of HTTP is to see it in action. You can use your browser's built-in developer tools to inspect the HTTP requests and responses that occur when you browse the web.
+
+**Steps:**
+
+1.  **Open your web browser (Chrome, Firefox, Safari, Edge).**
+2.  **Navigate to any website you like (e.g., `www.google.com`).**
+3.  **Open the Developer Tools.** The way to do this varies slightly by browser:
+    - **Chrome/Edge:** Press `F12` or right-click on the page and select "Inspect" or "Inspect Element," then go to the "Network" tab.
+    - **Firefox:** Press `F12` or right-click on the page and select "Inspect Element," then go to the "Network" tab.
+    - **Safari:** You might need to enable the "Develop" menu in Safari Preferences first. Then, right-click on the page and select "Inspect Element," and go to the "Network" tab.
+4.  **Reload the page (Ctrl+R or Cmd+R).** This will cause the browser to make new requests for all the resources needed to display the page.
+5.  **Examine the "Network" tab.** You will see a list of all the HTTP requests made by your browser (for the main HTML document, CSS files, JavaScript files, images, etc.).
+6.  **Click on any individual request in the list.** This will open a details panel where you can inspect:
+    - **Headers:** Look at the "Headers" section to see both the "Request Headers" sent by your browser and the "Response Headers" sent back by the server.
+    - **Status Code:** Find the "Status Code" in the overview or headers section to see the HTTP status code of the response.
+    - **Response:** Look at the "Response" tab to see the actual content returned by the server (e.g., the HTML code for the main page, the raw data for an image).
+    - **Request:** You can often see details about the specific request made.
+7.  **Experiment with different websites and observe the variety of requests and responses.** Pay attention to the different headers used for different types of resources and the status codes returned by the server.
+
+This hands-on exercise will give you a much clearer understanding of the underlying communication that powers the web.
+
+## 10. Introduction to HTML, CSS, and JavaScript (Brief Overview)
+
+While our focus is on backend development with Django, it's important to understand the roles of the core frontend technologies that work in conjunction with the backend to create web applications:
+
+- **HTML (Hypertext Markup Language):** HTML is the standard markup language for creating web pages. It provides the structure and content of a web page using a system of tags. These tags define elements like headings, paragraphs, images, links, forms, and more. The browser reads the HTML document and renders the content based on these tags.
+
+- **CSS (Cascading Style Sheets):** CSS is used to control the visual presentation of a web page. It allows you to define styles for HTML elements, such as colors, fonts, layout, spacing, and responsiveness. CSS separates the style from the structure, making web pages more maintainable and visually appealing.
+
+- **JavaScript (JS):** JavaScript is a scripting language that enables interactivity and dynamic behavior on web pages. It runs in the user's browser and can manipulate the HTML structure (DOM - Document Object Model), apply CSS styles dynamically, respond to user actions (like clicks and mouse movements), and make asynchronous requests to the server (AJAX) to update parts of the page without a full reload.
+
+In a typical web application built with Django, the Django backend will generate the HTML content (often dynamically using templates). This HTML is then sent to the user's browser. The browser will then apply CSS to style the page and execute any JavaScript code to add interactivity. The JavaScript might also communicate back with the Django backend to fetch or send data.
+
+## 11. Q\&A and Review
+
+This concludes our exploration of web fundamentals and the introduction to HTTP for today. Take a moment to review the concepts we've covered. Do you have any questions about anything we discussed?
+
+## 12. Self-Check Questions (Optional)
+
+- What is the client-server model, and how does it apply to web communication?
+- What is the difference between the Internet and the World Wide Web?
+- Explain the components of a URL.
+- What is the role of DNS?
+- Describe the purpose of an HTTP request and an HTTP response.
+- What are the key differences between the HTTP GET and POST methods?
+- What is an HTTP status code, and can you give a few examples?
+- What are HTTP headers used for?
+- Briefly describe the roles of HTML, CSS, and JavaScript in web development.
+
+## 13. Exercises
+
+**Exercise 1: Identifying URL Components**
+
+For the following URLs, identify the protocol, hostname (domain name), path, and any query parameters or fragments:
+
+1.  `http://www.example.com/products/123?sort=price&order=desc#reviews`
+2.  `https://blog.mywebsite.org/2023/03/understanding-http`
+3.  `ftp://files.myserver.net/public/document.pdf`
+
+**Exercise 2: Exploring HTTP Headers**
+
+Visit a simple website (like a basic news site or a blog) using your browser. Open the developer tools (Network tab) and inspect the HTTP request for the main HTML document of the page. Identify at least three request headers and explain what information they provide. Then, inspect the HTTP response for the same document and identify at least three response headers and their purpose.
+
+**Exercise 3: HTTP Status Code Scenarios**
+
+Describe a scenario where you might encounter each of the following HTTP status codes while Browse the web:
+
+- 200 OK
+- 404 Not Found
+- 500 Internal Server Error
+- 301 Moved Permanently
+
+## 14. Daily Task
+
+**Task: Simulate an HTTP Conversation**
+
+Imagine you (the client - your browser) want to retrieve a specific image (`logo.png`) from the server `www.my-awesome-website.com`.
+
+1.  Write down the HTTP GET request your browser would send to the server (include the method, path, `Host` header, and at least one other common request header like `User-Agent`).
+2.  Imagine the server successfully finds the image. Write down a simplified HTTP response the server might send back (include the status line with the status code and reason phrase, the `Content-Type` header indicating it's an image, and a placeholder for the image data in the body).
+
+---
+
+**End of Day 1 Study Material & Notes**
+
+---
+
+## Solutions to Exercises and Daily Task
+
+<details>
+<summary><b>Solution for Exercise 1: Identifying URL Components</b></summary>
+
+1.  `http://www.example.com/products/123?sort=price&order=desc#reviews`
+    - **Protocol:** `http://`
+    - **Hostname:** `www.example.com`
+    - **Path:** `/products/123`
+    - **Query Parameters:** `sort=price&order=desc`
+    - **Fragment:** `#reviews`
+2.  `https://blog.mywebsite.org/2023/03/understanding-http`
+    - **Protocol:** `https://`
+    - **Hostname:** `blog.mywebsite.org`
+    - **Path:** `/2023/03/understanding-http`
+    - **Query Parameters:** None
+    - **Fragment:** None
+3.  `ftp://files.myserver.net/public/document.pdf`
+    - **Protocol:** `ftp://`
+    - **Hostname:** `files.myserver.net`
+    - **Path:** `/public/document.pdf`
+    - **Query Parameters:** None
+    - **Fragment:** None
+
+</details>
+
+<details>
+<summary><b>Solution for Exercise 2: Exploring HTTP Headers</b></summary>
+
+This solution requires the user to perform the action in their browser. A sample answer would look like this:
+
+**Example Request Headers (from visiting a news website):**
+
+- `Host: www.example-news.com` - Specifies the domain of the server being requested.
+- `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...` - Identifies the browser and operating system being used.
+- `Accept: text/html,application/xhtml+xml,...` - Indicates that the browser can accept HTML, XHTML, and other content types.
+
+**Example Response Headers (for the same request):**
+
+- `Content-Type: text/html; charset=UTF-8` - Specifies that the response body is HTML content encoded in UTF-8.
+- `Date: Mon, 17 Mar 2025 ... GMT` - Indicates the date and time the server generated the response.
+- `Server: nginx/1.18.0` - Identifies the web server software being used (in this case, nginx version 1.18.0).
+
+</details>
+
+<details>
+<summary><b>Solution for Exercise 3: HTTP Status Code Scenarios</b></summary>
+
+- **200 OK:** You successfully load a web page after clicking on a link or entering a URL.
+- **404 Not Found:** You click on a broken link or enter a URL for a page that no longer exists on the server.
+- **500 Internal Server Error:** While Browse a website, you encounter an error message indicating that something went wrong on the server's side, and it couldn't fulfill your request.
+- **301 Moved Permanently:** You try to access an old URL of a website, and the server redirects you to a new URL, indicating that the content has permanently moved.
+
+</details>
+
+<details>
+<summary><b>Solution for Daily Task: Simulate an HTTP Conversation</b></summary>
+
+**1. HTTP GET Request:**
+
+```
+GET /images/logo.png HTTP/1.1
+Host: www.my-awesome-website.com
+User-Agent: MyWebApp/1.0 (My Operating System)
+Accept: image/png,image/jpeg,*/*
+```
+
+**Explanation:**
+
+- `GET`: The HTTP method to request data.
+- `/images/logo.png`: The path to the specific image on the server.
+- `HTTP/1.1`: The HTTP version being used.
+- `Host: www.my-awesome-website.com`: Specifies the domain name of the server.
+- `User-Agent: MyWebApp/1.0 (My Operating System)`: Identifies the client making the request (you can customize this).
+- `Accept: image/png,image/jpeg,*/*`: Indicates the types of images the client can accept.
+
+**2. HTTP Response:**
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/png
+Content-Length: [size of the image in bytes]
+Date: Mon, 17 Mar 2025 07:55:00 GMT
+Server: MyWebServer/2.0
+
+[Binary data of the logo.png image]
+```
+
+**Explanation:**
+
+- `HTTP/1.1 200 OK`: The status line indicating success.
+- `Content-Type: image/png`: Specifies that the response body contains a PNG image.
+- `Content-Length: [size of the image in bytes]`: Indicates the size of the image data.
+- `Date: Mon, 17 Mar 2025 07:55:00 GMT`: The date and time the response was sent.
+- `Server: MyWebServer/2.0`: Identifies the server software.
+- `[Binary data of the logo.png image]`: The actual binary data of the requested image would be here.
+
+</details>
+
+---
+
+**End of Day 1 Study Material & Notes**
