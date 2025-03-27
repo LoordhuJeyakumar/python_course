@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "First Post",
+    "content": "This is the content of the first post. It demonstrates how to load dynamic content from a JSON file.",
+    "published_date": "2025-03-27T10:00:00"
+  },
+  {
+    "id": 2,
+    "title": "Second Post",
+    "content": "Here is some more content for the second post. Using JSON allows us to bypass models for now.",
+    "published_date": "2025-03-28T11:30:00"
+  },
+  {
+    "id": 3,
+    "title": "Third Post",
+    "content": "This is the content of the third post. It demonstrates how to load dynamic content from a JSON file.",
+    "published_date": "2025-03-29T09:15:00"
+  }
+
+
+]
