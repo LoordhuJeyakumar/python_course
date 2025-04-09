@@ -1,0 +1,17 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p><strong>Author:</strong> {{ post.author }}</p>
+<p><strong>Category:</strong> {{ post.category }}</p>
+<p><strong>Status:</strong> {{ post.get_status_display }}</p>
+<p><strong>Published Date:</strong> {{ post.published_date }}</p>
+<div>
+    {{ post.content|linebreaks }}
+</div>
+<p>
+    <a href="{% url 'post_update' slug=post.slug %}">Edit Post</a> |
+    <a href="{% url 'post_delete' slug=post.slug %}">Delete Post</a> |
+    <a href="{% url 'post_list' %}">Back to Posts</a>
+</p>
+{% endblock content %}

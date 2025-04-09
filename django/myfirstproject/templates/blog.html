@@ -2,12 +2,15 @@
 {% block title %} Blog {% endblock %} 
 
 {% block content %}
-    <h1>Blog</h1>
-    <p>Checkout our <a href="/">Home</a></p>
-    <ul>
-      <li>
-        <a href="{% url 'post_list' %}">Blog</a>
-      </li>
-    </ul>
+<header>
+  <h1><a href="{% url 'post_list' %}">My Blog</a></h1>
+  <nav>
+      <a href="{% url 'post_create' %}">New Post</a>
+      <a href="{% url 'post_list' %}">View all posts</a>
+  </nav>
+</header>
+<main>
+
+</main>
 {% endblock %}
 

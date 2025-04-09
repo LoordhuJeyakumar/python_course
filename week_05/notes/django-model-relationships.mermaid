@@ -1,0 +1,47 @@
+classDiagram
+    class OneToOneField {
+        User has one Profile
+        Profile belongs to one User
+    }
+    class ForeignKey {
+        Article has one Author
+        Author has many Articles
+    }
+    class ManyToManyField {
+        Article has many Tags
+        Tag appears on many Articles
+    }
+    
+    User "1" -- "1" Profile : OneToOneField
+    Author "1" -- "*" Article : ForeignKey
+    Article "*" -- "*" Tag : ManyToManyField
+    
+    class User {
+        +username
+        +email
+        +password
+    }
+    
+    class Profile {
+        +user (OneToOneField)
+        +bio
+        +avatar
+    }
+    
+    class Author {
+        +name
+        +bio
+    }
+    
+    class Article {
+        +title
+        +content
+        +publication_date
+        +author (ForeignKey)
+        +tags (ManyToManyField)
+    }
+    
+    class Tag {
+        +name
+        +articles (ManyToManyField)
+    }

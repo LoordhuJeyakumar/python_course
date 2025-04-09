@@ -1,0 +1,27 @@
+flowchart TD
+    subgraph Client
+        Browser["User's Browser"]
+    end
+    
+    subgraph "Django Framework"
+        URLs["URLs (urls.py)"]
+        Views["Views (views.py)"]
+        Models["Models (models.py)"]
+        Templates["Templates (.html)"]
+        
+        Database[(Database)]
+    end
+    
+    Browser -->| HTTP Request| URLs
+    URLs -->| Route Request| Views
+    Views -->| Query Data| Models
+    Models <-->| Interact| Database
+    Views -->| Pass Data| Templates
+    Templates -->| Render HTML| Views
+    Views -->| HTTP Response| Browser
+    
+    style URLs fill:#f9f,stroke:#333,stroke-width:2px
+    style Views fill:#bbf,stroke:#333,stroke-width:2px
+    style Models fill:#bfb,stroke:#333,stroke-width:2px
+    style Templates fill:#ffb,stroke:#333,stroke-width:2px
+    style Database fill:#ddd,stroke:#333,stroke-width:2px
