@@ -41,7 +41,9 @@ Over the past few days, we've diligently worked on defining our data models and 
 
 - **Default URL:** The Django Admin interface is typically accessible at the `/admin/` URL path of your Django project.
 - **Creating a Superuser:** To access the admin interface, you need a user with administrative privileges. Django provides a management command to create a superuser:
+
     ```bash
+    
     python manage.py createsuperuser
     ```
     Follow the prompts to enter a username, email address (optional), and password for your superuser account.
