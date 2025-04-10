@@ -260,6 +260,7 @@ Throughout this week, we've built a solid understanding of Django Models and Dat
 
 <details>
 <summary><b>Solution for Exercise 1</b></summary>
+
 ```python
 from blog.models import Author, Category, BlogPost
 from django.db.models import Count
@@ -311,6 +312,7 @@ except Category.DoesNotExist:
 
 <details>
 <summary><b>Solution for Exercise 2</b></summary>
+
 ```python
 from catalog.models import Book, Author
 from django.db.models import Q
@@ -341,6 +343,7 @@ for author in authors_a_with_contact:
 
 <details>
 <summary><b>Solution for Exercise 3</b></summary>
+
 ```python
 from blog.models import BlogPost
 from catalog.models import Book, Tag
@@ -374,6 +377,7 @@ except AttributeError:
 
 <details>
 <summary><b>Solution for Daily Task</b></summary>
+
 ```python
 from blog.models import Category, BlogPost
 from django.utils import timezone
