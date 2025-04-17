@@ -1,0 +1,46 @@
+{% extends "layout.html" %} 
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Contact Us</h1>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                <!-- Method 1: Render the entire form as paragraphs -->
+                {{ form.as_p }}
+                
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Information</h5>
+                    <p class="card-text">You can also reach us at:</p>
+                    <ul class="list-unstyled">
+                        <li>Email: example@example.com</li>
+                        <li>Phone: (123) 456-7890</li>
+                        <li>Address: 123 Main St, Anytown, USA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

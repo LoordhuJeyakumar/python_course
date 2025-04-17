@@ -1,6 +1,95 @@
-{% extends 'layout.html' %} 
-{% block title %} About Page {% endblock %} 
+{% extends 'layout.html' %}
+{% block title %}About{% endblock %}
+
 {% block content %}
-        <h1>About</h1>
-        <p>Check out my <a href="/">Home</a> page.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h1 class="display-5 fw-bold mb-4">About This Project</h1>
+                    <p class="lead mb-4">This Django Blog is an educational project designed to teach the fundamentals of web development using Django.</p>
+                    
+                    <h3 class="mt-5 mb-3">What Students Will Learn</h3>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Django models and database relationships
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            URL routing and view implementation
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Template inheritance and rendering
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            User authentication and permissions
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            CRUD operations (Create, Read, Update, Delete)
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Front-end integration with Bootstrap
+                        </li>
+                    </ul>
+                    
+                    <h3 class="mt-5 mb-3">Technologies Used</h3>
+                    <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+                        <div class="col">
+                            <div class="card h-100 text-center border-0 shadow-sm p-3">
+                                <div class="py-3">
+                                    <i class="fab fa-python fa-3x text-primary"></i>
+                                </div>
+                                <div class="card-body p-0">
+                                    <h5 class="card-title mb-0">Python</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center border-0 shadow-sm p-3">
+                                <div class="py-3">
+                                    <i class="fas fa-cubes fa-3x text-success"></i>
+                                </div>
+                                <div class="card-body p-0">
+                                    <h5 class="card-title mb-0">Django</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center border-0 shadow-sm p-3">
+                                <div class="py-3">
+                                    <i class="fab fa-bootstrap fa-3x text-purple" style="color: #7952b3;"></i>
+                                </div>
+                                <div class="card-body p-0">
+                                    <h5 class="card-title mb-0">Bootstrap</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 text-center border-0 shadow-sm p-3">
+                                <div class="py-3">
+                                    <i class="fas fa-database fa-3x text-warning"></i>
+                                </div>
+                                <div class="card-body p-0">
+                                    <h5 class="card-title mb-0">SQLite</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <a href="{% url 'post_list' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-right me-2"></i>Explore the Blog
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

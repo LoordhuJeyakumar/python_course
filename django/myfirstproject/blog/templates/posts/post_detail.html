@@ -1,17 +1,80 @@
-
 {% extends "layout.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
 {% block content %}
-<h2>{{ post.title }}</h2>
-<p><strong>Author:</strong> {{ post.author }}</p>
-<p><strong>Category:</strong> {{ post.category }}</p>
-<p><strong>Status:</strong> {{ post.get_status_display }}</p>
-<p><strong>Published Date:</strong> {{ post.published_date }}</p>
-<div>
-    {{ post.content|linebreaks }}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Blog</a></li>
+                <li class="breadcrumb-item active">{{ post.title|truncatechars:30 }}</li>
+            </ol>
+        </nav>
+
+        <article class="blog-post">
+            <header class="mb-4">
+                <span class="badge bg-{% if post.status == 'published' %}success{% elif post.status == 'draft' %}warning{% else %}secondary{% endif %} mb-2">
+                    {{ post.get_status_display }}
+                </span>
+                
+                <h1 class="display-5 fw-bold post-title">{{ post.title }}</h1>
+                
+                <div class="post-meta mb-3">
+                    {% if post.published_date %}
+                    <span><i class="far fa-calendar-alt"></i> Published: {{ post.published_date|date:"F d, Y" }}</span>
+                    {% endif %}
+                    
+                    {% if post.author %}
+                    <span class="ms-3"><i class="far fa-user"></i> By: {{ post.author.username }}</span>
+                    {% endif %}
+                    
+                    {% if post.category %}
+                    <span class="ms-3"><i class="fas fa-folder"></i> Category: 
+                        <a href="#" class="category-badge text-decoration-none">{{ post.category.name }}</a>
+                    </span>
+                    {% endif %}
+                </div>
+            </header>
+
+            <div class="post-content mb-5">
+                {{ post.content|linebreaks }}
+            </div>
+
+            <div class="post-actions d-flex justify-content-between mb-5">
+                <div>
+                    <a href="{% url 'post_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Posts
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'post_update' slug=post.slug %}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    <a href="{% url 'post_delete' slug=post.slug %}" class="btn btn-outline-danger">
+                        <i class="fas fa-trash-alt me-1"></i>Delete
+                    </a>
+                </div>
+            </div>
+
+            <!-- Comments section -->
+            <div class="comments-section mt-5">
+                <h4 class="mb-4">Comments ({{ post.comments.count }})</h4>
+                
+                {% for comment in post.comments.all %}
+                <div class="comment mb-4">
+                    <h5>{{ comment.name }}</h5>
+                    <p class="comment-meta">{{ comment.created_at|date:"F d, Y" }}</p>
+                    <p>{{ comment.content }}</p>
+                </div>
+                {% empty %}
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+                {% endfor %}
+                
+                <!-- Comment form would go here -->
+            </div>
+        </article>
+    </div>
 </div>
-<p>
-    <a href="{% url 'post_update' slug=post.slug %}">Edit Post</a> |
-    <a href="{% url 'post_delete' slug=post.slug %}">Delete Post</a> |
-    <a href="{% url 'post_list' %}">Back to Posts</a>
-</p>
-{% endblock content %}
+{% endblock %}

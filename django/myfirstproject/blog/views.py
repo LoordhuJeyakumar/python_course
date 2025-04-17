@@ -12,6 +12,8 @@ import json
 
 from .models import Post, Category, Comment
 
+from .forms import CommentForm, PostForm, CategoryForm,ContactForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -128,10 +130,6 @@ def post_list(request):
     }
     return render(request, 'posts/post_list.html', context)
 
-def post_detail(request, slug):
-    
-    post = Post.objects.get(slug=slug)
-    return render(request, 'posts/post_detail.html', {'post': post})
 
 def post_create(request):
     status_choices = Post.STATUS_CHOICES
@@ -180,4 +178,96 @@ def post_delete(request, slug):
     return render(request, 'posts/post_confirm_delete.html', {'post': post})
 
 
+# Basic Form -  Contact
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Process the form data here (e.g., send an email)
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
 
+            # For demonstration purposes, let's print the form data
+            print(f"Name: {name}, Email: {email}, Subject: {subject}, Message: {message}")
+
+            # Redirect to a success page or do something else
+            return redirect('success_page')  # Replace 'success_page' with your actual success page URL
+    else:
+        form = ContactForm()
+
+    return render(request, 'blog/contact.html', {'form': form})
+
+
+# ModelForm - Create Post
+def post_create_form(request):
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            # Save the form data to the database
+            # form.save()
+
+            # Dont save the form data to the database - we need set  the author
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+
+            messages.success(request, 'Post created successfully.')
+
+            return redirect('post_detail', slug=post.slug)
+    else:
+        form = PostForm()
+
+    return render(request, 'posts/post_form.html', {'form': form, 'title': 'Create New Post'})
+
+
+
+# ModelForm - Edit Post
+def post_update_form(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Post updated successfully.')
+            return redirect('post_detail', slug=post.slug)
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'posts/post_form.html', {'form': form, 'title': f'Edit Post: {post.title}'})
+
+
+# Comment Form - Create Comment on post detail page
+
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.all()
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.save()
+            messages.success(request, 'Comment added successfully.')
+            return redirect('post_detail', slug=post.slug)
+    else:
+        comment_form = CommentForm()
+    
+    return render(request, 'posts/post_detail.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
+
+
+def catagory_create(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category created successfully.')
+            return redirect('category_list')
+    else:
+        form = CategoryForm()
+
+    return render(request, 'posts/category_form.html', {'form': form, 'title': 'Create New Category'})
