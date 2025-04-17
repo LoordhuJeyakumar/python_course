@@ -1,75 +1,205 @@
 {% extends 'layout.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}DevBlog - Modern Django Blogging Platform{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #4361ee 100%);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40%;
+        height: 100%;
+        background: url('/static/img/pattern.svg') no-repeat right center;
+        background-size: cover;
+        opacity: 0.1;
+    }
+    
+    .feature-card {
+        height: 100%;
+        transition: all 0.3s ease;
+        border-radius: 12px;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .recent-posts {
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row align-items-center">
-        <div class="col-lg-6">
-            <h1 class="display-4 fw-bold mb-4">Welcome to Django Blog</h1>
-            <p class="lead mb-4">A comprehensive blogging platform built with Django. Share your thoughts, insights, and stories with the world.</p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                <a href="{% url 'post_list' %}" class="btn btn-primary btn-lg px-4 me-md-2">
-                    <i class="fas fa-newspaper me-2"></i>Read Blog Posts
-                </a>
-                <a href="{% url 'post_create' %}" class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="fas fa-pencil-alt me-2"></i>Write a Post
-                </a>
+<!-- Hero Section -->
+<section class="container mb-5">
+    <div class="hero-section shadow animate-fade-up">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">Share Your Ideas With The World</h1>
+                <p class="lead mb-4 opacity-90">A modern blogging platform built with Django. Create beautiful content, engage with your audience, and grow your community.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'post_list' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-book-open me-2"></i>Explore Posts
+                    </a>
+                    <a href="{% url 'post_create' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-pen me-2"></i>Start Writing
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-6 d-flex justify-content-center mt-5 mt-lg-0">
-            <div class="position-relative" style="width: 100%; max-width: 500px;">
-                <!-- Placeholder for a hero image -->
-                <div style="background-color: #e9ecef; height: 300px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-blog" style="font-size: 5rem; color: #6c757d;"></i>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="text-center">
+                    <i class="fas fa-blog" style="font-size: 10rem; opacity: 0.3;"></i>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <div class="row mt-5 pt-5">
-        <div class="col-12 text-center mb-4">
-            <h2 class="fw-bold">Features</h2>
-            <p class="lead">Discover what our blog platform offers</p>
-        </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto" 
-                         style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-edit fa-2x"></i>
-                    </div>
-                    <h3 class="fs-4">Easy Content Creation</h3>
-                    <p class="mb-0">Create and manage blog posts with our intuitive interface.</p>
+<!-- Features Section -->
+<section class="container mb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Why Choose DevBlog</h2>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">Our platform comes with everything you need to create, publish and share amazing content.</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card p-4 bg-white shadow-sm">
+                <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-3 mx-auto">
+                    <i class="fas fa-feather-alt fa-2x"></i>
                 </div>
+                <h3 class="h4 mb-3">Effortless Writing</h3>
+                <p class="text-muted mb-0">Focus on your content with our clean, distraction-free writing experience.</p>
             </div>
         </div>
         
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto" 
-                         style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-users fa-2x"></i>
-                    </div>
-                    <h3 class="fs-4">Community Engagement</h3>
-                    <p class="mb-0">Enable comments and discussions on your blog posts.</p>
+        <div class="col-md-4">
+            <div class="feature-card p-4 bg-white shadow-sm">
+                <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-3 mx-auto">
+                    <i class="fas fa-users fa-2x"></i>
                 </div>
+                <h3 class="h4 mb-3">Community Engagement</h3>
+                <p class="text-muted mb-0">Build a community around your content with comments and discussions.</p>
             </div>
         </div>
         
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto" 
-                         style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-mobile-alt fa-2x"></i>
-                    </div>
-                    <h3 class="fs-4">Responsive Design</h3>
-                    <p class="mb-0">Enjoy a seamless experience across all devices.</p>
+        <div class="col-md-4">
+            <div class="feature-card p-4 bg-white shadow-sm">
+                <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-3 mx-auto">
+                    <i class="fas fa-mobile-alt fa-2x"></i>
                 </div>
+                <h3 class="h4 mb-3">Perfect on Any Device</h3>
+                <p class="text-muted mb-0">Enjoy a seamless experience on desktop, tablet, or smartphone.</p>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Recent Posts Section -->
+<section class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Recent Posts</h2>
+        <a href="{% url 'post_list' %}" class="btn btn-outline-primary">
+            View All <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+    
+    <div class="row g-4">
+        {% for post in posts|slice:":3" %}
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <span class="badge bg-{% if post.status == 'published' %}success{% elif post.status == 'draft' %}warning{% else %}secondary{% endif %} mb-2">
+                        {{ post.get_status_display }}
+                    </span>
+                    <h5 class="card-title post-title mb-3">
+                        <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+                    </h5>
+                    <p class="post-meta mb-3">
+                        <i class="far fa-calendar-alt"></i> {{ post.published_date|date:"M d, Y" }}
+                        {% if post.author %}
+                        <span><i class="far fa-user"></i> {{ post.author.username }}</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a href="{% url 'post_detail' post.slug %}" class="btn btn-sm btn-outline-primary">
+                        Read More <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> No posts available yet. Be the first to publish content!
+            </div>
+            <a href="{% url 'post_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i> Create Your First Post
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="container mb-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="bg-light p-5 rounded-4 text-center">
+                <h2 class="fw-bold mb-3">Ready to Share Your Story?</h2>
+                <p class="lead mb-4">Join our community of writers and readers today.</p>
+                <a href="{% url 'post_create' %}" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-pen me-2"></i>Start Writing
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // You can add animation effects or other interactive features here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation classes to elements as they scroll into view
+        const animateElements = document.querySelectorAll('.feature-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+    });
+</script>
 {% endblock %}

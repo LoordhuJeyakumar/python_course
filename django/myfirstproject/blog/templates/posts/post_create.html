@@ -1,41 +1,163 @@
-<!-- django\myfirstproject\blog\templates\posts\post_create.html -->
 {% extends "layout.html" %}
 {% block content %}
-  {% if post %}
-    <h2>Edit Post</h2>
-  {% else %}
-    <h2>New Post</h2>
-  {% endif %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          {% if post %}
+            <h2 class="h4 mb-0"><i class="fas fa-edit me-2"></i>Edit Post</h2>
+          {% else %}
+            <h2 class="h4 mb-0"><i class="fas fa-plus-circle me-2"></i>Create New Post</h2>
+          {% endif %}
+        </div>
+        
+        <div class="card-body">
+          {% if error_message %}
+            <div class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>{{ error_message }}
+            </div>
+          {% endif %}
 
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-3">
+              <label for="id_title" class="form-label fw-bold">Title</label>
+              <input type="text" class="form-control" name="title" id="id_title" value="{{ post.title|default_if_none:'' }}" required>
+              <div class="form-text text-muted">Create a compelling title for your post</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="id_slug" class="form-label fw-bold">Slug</label>
+              <div class="input-group">
+                <span class="input-group-text text-muted">/posts/</span>
+                <input type="text" class="form-control" name="slug" id="id_slug" value="{{ post.slug|default_if_none:'' }}" required>
+              </div>
+              <div class="form-text text-muted">URL-friendly version of the title (e.g., my-awesome-post)</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="id_content" class="form-label fw-bold">Content</label>
+              <textarea name="content" id="id_content" class="form-control" rows="10" required>{{ post.content|default_if_none:'' }}</textarea>
+              <div class="form-text text-muted">Write your post content here. You can use Markdown for formatting.</div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="id_status" class="form-label fw-bold">Status</label>
+              <select name="status" id="id_status" class="form-select">
+                {% for key, value in status_choices %}
+                  <option value="{{ key }}" {% if post and post.status == key %}selected{% endif %}>
+                    {{ value }}
+                  </option>
+                {% endfor %}
+              </select>
+              <div class="form-text text-muted">Set as "Draft" to save without publishing</div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="{% url 'post_list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Posts
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-1"></i> {% if post %}Update{% else %}Publish{% endif %} Post
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      {% if post %}
+      <div class="card mt-4 shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+          <h3 class="h5 mb-0"><i class="fas fa-trash-alt me-2"></i>Danger Zone</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-text">This action cannot be undone. This will permanently delete the post.</p>
+          <a href="{% url 'post_delete' slug=post.slug %}" class="btn btn-outline-danger">
+            <i class="fas fa-trash-alt me-1"></i> Delete Post
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    
+    <div class="col-lg-4 mt-4 mt-lg-0">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h3 class="h5 mb-0">Tips for Great Posts</h3>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Use a clear, descriptive title</li>
+            <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Break content into paragraphs</li>
+            <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Include relevant images if possible</li>
+            <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Proofread before publishing</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="card shadow-sm">
+        <div class="card-header bg-light">
+          <h3 class="h5 mb-0">Markdown Support</h3>
+        </div>
+        <div class="card-body">
+          <p class="card-text">You can use these Markdown elements:</p>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <tbody>
+                <tr>
+                  <td><code># Heading</code></td>
+                  <td>Main heading</td>
+                </tr>
+                <tr>
+                  <td><code>**bold**</code></td>
+                  <td>Bold text</td>
+                </tr>
+                <tr>
+                  <td><code>*italic*</code></td>
+                  <td>Italic text</td>
+                </tr>
+                <tr>
+                  <td><code>[Link](url)</code></td>
+                  <td>Hyperlink</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <form method="post">
-      {% csrf_token %}
-      <p>
-        <label for="id_title">Title:</label><br>
-        <input type="text" name="title" id="id_title" value="{{ post.title|default_if_none:'' }}">
-      </p>
-      <p>
-        <label for="id_slug">Slug:</label><br>
-        <input type="text" name="slug" id="id_slug" value="{{ post.slug|default_if_none:'' }}">
-      </p>
-      <p>
-        <label for="id_content">Content:</label><br>
-        <textarea name="content" id="id_content" rows="6">{{ post.content|default_if_none:'' }}</textarea>
-      </p>
-      <p>
-        <label for="id_status">Status:</label><br>
-        <select name="status" id="id_status">
-          {% for key, value in status_choices %}
-            <option value="{{ key }}" {% if post and post.status == key %}selected{% endif %}>
-              {{ value }}
-            </option>
-          {% endfor %}
-        </select>
-      </p>
-      <button type="submit">Save</button>
-  </form>
-  <p><a href="{% url 'post_list' %}">Back to Posts</a></p>
+<script>
+  // Auto-generate slug from title
+  document.getElementById('id_title').addEventListener('input', function() {
+    if (!document.getElementById('id_slug').value) {
+      const slugValue = this.value
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+      document.getElementById('id_slug').value = slugValue;
+    }
+  });
+  
+  // Form validation
+  (function() {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    
+    Array.from(forms).forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script>
 {% endblock content %}

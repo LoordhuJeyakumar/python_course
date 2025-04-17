@@ -1,0 +1,25 @@
+{% extends "layout.html" %} 
+
+{% block title %}Success Page{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fa fa-check-circle text-Success mb-3" style="font-size:4rem;" aria-hidden="true"></i>
+                    <h2 class="card-title">Thank You!</h2>
+                    <p class="card-text">Your message has been sent successfully, We'll get back to you soon as possible.</p>
+                    <p class+"card-text mt-4">Reference number : #{{reference_number }}</p>
+                    <hr>
+                    <a href="/" class="btn btn-primary">Return to Home</a>
+                    <a href="/contact/" class="btn btn-outline-secondary">Send Another Message</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

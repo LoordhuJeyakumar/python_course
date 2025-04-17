@@ -155,7 +155,7 @@ def post_create(request):
 
 def post_update(request, slug):
         post = Post.objects.get(slug=slug)
-
+        status_choices = Post.STATUS_CHOICES
         if request.method == 'POST':
             post.title = request.POST.get('title')
             post.slug = request.POST.get('slug')
@@ -166,7 +166,7 @@ def post_update(request, slug):
 
             return redirect('post_detail', slug=post.slug)
 
-        return render(request, 'posts/post_create.html', {'post': post})
+        return render(request, 'posts/post_create.html', {'post': post,'status_choices': status_choices})
 
 def post_delete(request, slug):
     post = get_object_or_404(Post, slug=slug)
@@ -180,6 +180,7 @@ def post_delete(request, slug):
 
 # Basic Form -  Contact
 def contact_view(request):
+    
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():

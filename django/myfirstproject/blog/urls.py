@@ -12,7 +12,7 @@ urlpatterns = [
     path('posts/<slug:slug>/update/', views.post_update, name='post_update'),
     path('posts/<slug:slug>/delete/', views.post_delete, name='post_delete'),
 
-    path('contact/', views.contact_view, name='contact'),
+    
     path('posts/new/', views.post_create_form, name='post_create_form'),
     path('posts/<slug:slug>/edit/', views.post_update_form, name='post_update_form'),
     path('category/new/', views.catagory_create, name='category_create'),
