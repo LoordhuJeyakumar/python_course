@@ -24,7 +24,7 @@ class PostForm(forms.ModelForm):
     """
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'content', 'status', 'category', 'published_date']
+        fields = ['title', 'slug', 'content', 'status', 'category', 'published_date', 'featured_image', 'thumbnail']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
@@ -32,6 +32,8 @@ class PostForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
             'published_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'featured_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'thumbnail': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
         help_texts = {
@@ -40,8 +42,11 @@ class PostForm(forms.ModelForm):
             'content': 'Enter the content of the post',
             'status': 'Select the status of the post',
             'category': 'Select the category of the post',
-            'published_date': 'Enter the published date of the post Leave empty for draft',
+            'published_date': 'Enter the published date of the post. Leave empty for draft',
+            'featured_image': 'Upload a featured image for the post (recommended size: 1200x600)',
+            'thumbnail': 'Upload a thumbnail image for the post (recommended size: 400x200)',
         }
+        
 
 
 class CommentForm(forms.ModelForm):

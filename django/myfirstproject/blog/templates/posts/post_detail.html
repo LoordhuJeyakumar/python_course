@@ -3,78 +3,144 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Blog</a></li>
-                <li class="breadcrumb-item active">{{ post.title|truncatechars:30 }}</li>
-            </ol>
-        </nav>
-
-        <article class="blog-post">
-            <header class="mb-4">
-                <span class="badge bg-{% if post.status == 'published' %}success{% elif post.status == 'draft' %}warning{% else %}secondary{% endif %} mb-2">
-                    {{ post.get_status_display }}
-                </span>
-                
-                <h1 class="display-5 fw-bold post-title">{{ post.title }}</h1>
-                
-                <div class="post-meta mb-3">
-                    {% if post.published_date %}
-                    <span><i class="far fa-calendar-alt"></i> Published: {{ post.published_date|date:"F d, Y" }}</span>
-                    {% endif %}
-                    
-                    {% if post.author %}
-                    <span class="ms-3"><i class="far fa-user"></i> By: {{ post.author.username }}</span>
-                    {% endif %}
-                    
-                    {% if post.category %}
-                    <span class="ms-3"><i class="fas fa-folder"></i> Category: 
-                        <a href="#" class="category-badge text-decoration-none">{{ post.category.name }}</a>
-                    </span>
-                    {% endif %}
-                </div>
-            </header>
-
-            <div class="post-content mb-5">
-                {{ post.content|linebreaks }}
-            </div>
-
-            <div class="post-actions d-flex justify-content-between mb-5">
-                <div>
-                    <a href="{% url 'post_list' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Posts
-                    </a>
-                </div>
-                <div>
-                    <a href="{% url 'post_update' slug=post.slug %}" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-edit me-1"></i>Edit
-                    </a>
-                    <a href="{% url 'post_delete' slug=post.slug %}" class="btn btn-outline-danger">
-                        <i class="fas fa-trash-alt me-1"></i>Delete
-                    </a>
-                </div>
-            </div>
-
-            <!-- Comments section -->
-            <div class="comments-section mt-5">
-                <h4 class="mb-4">Comments ({{ post.comments.count }})</h4>
-                
-                {% for comment in post.comments.all %}
-                <div class="comment mb-4">
-                    <h5>{{ comment.name }}</h5>
-                    <p class="comment-meta">{{ comment.created_at|date:"F d, Y" }}</p>
-                    <p>{{ comment.content }}</p>
-                </div>
-                {% empty %}
-                <p class="text-muted">No comments yet. Be the first to comment!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 {% endfor %}
+            {% endif %}
+
+            <article class="blog-post">
+                <div class="post-header mb-4">
+                    <h1 class="display-4 fw-bold">{{ post.title }}</h1>
+                    <div class="post-meta text-muted mb-3">
+                        <span><i class="far fa-calendar-alt me-1"></i> {{ post.published_date|date:"F d, Y"|default:"Not published" }}</span>
+                        {% if post.author %}
+                            <span class="ms-3"><i class="far fa-user me-1"></i> {{ post.author.username }}</span>
+                        {% endif %}
+                        <span class="ms-3">
+                            <span class="badge bg-{% if post.status == 'published' %}success{% elif post.status == 'draft' %}warning{% else %}secondary{% endif %}">
+                                {{ post.get_status_display }}
+                            </span>
+                        </span>
+                    </div>
+                    
+                    <div class="post-actions mb-4">
+                        <a href="{% url 'post_update_form' post.slug %}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                        <a href="{% url 'post_delete' post.slug %}" class="btn btn-sm btn-outline-danger ms-2">
+                            <i class="fas fa-trash me-1"></i> Delete
+                        </a>
+                        <a href="{% url 'post_list' %}" class="btn btn-sm btn-outline-secondary ms-2">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Posts
+                        </a>
+                    </div>
+
+                    {% if post.featured_image %}
+                        <div class="post-featured-image mb-4">
+                            <img src="{{ post.featured_image.url }}" class="img-fluid rounded" alt="{{ post.title }}">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="post-content">
+                    {{ post.content|linebreaks }}
+                </div>
+
+                {% if post.category %}
+                    <div class="post-categories mt-4">
+                        <span class="text-muted">Category:</span>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none ms-1 category-badge">
+                            {{ post.category.name }}
+                        </a>
+                    </div>
+                {% endif %}
+            </article>
+
+            <hr class="my-5">
+
+            <section class="comments mt-5">
+                <h3 class="mb-4">Comments ({{ comments|length }})</h3>
                 
-                <!-- Comment form would go here -->
-            </div>
-        </article>
+                {% if comments %}
+                    <div class="comment-list">
+                        {% for comment in comments %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="comment-avatar rounded-circle bg-light d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-user text-secondary"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="card-title mb-0">{{ comment.name }}</h5>
+                                            <small class="text-muted">{{ comment.created_at|date:"F d, Y g:i A" }}</small>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">{{ comment.content }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-light text-center py-4">
+                        <i class="far fa-comment-dots fa-2x mb-3 text-muted"></i>
+                        <p class="mb-0">No comments yet. Be the first to comment!</p>
+                    </div>
+                {% endif %}
+                
+                <div class="add-comment mt-5">
+                    <h4 class="mb-4">Add a Comment</h4>
+                    <form method="post" class="comment-form">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ comment_form.name.id_for_label }}" class="form-label">Name</label>
+                                {{ comment_form.name }}
+                                {% if comment_form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ comment_form.name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="{{ comment_form.email.id_for_label }}" class="form-label">Email</label>
+                                {{ comment_form.email }}
+                                {% if comment_form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ comment_form.email.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="{{ comment_form.content.id_for_label }}" class="form-label">Comment</label>
+                                {{ comment_form.content }}
+                                {% if comment_form.content.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ comment_form.content.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i> Post Comment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 {% endblock %}

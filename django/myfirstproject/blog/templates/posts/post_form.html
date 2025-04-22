@@ -19,46 +19,142 @@
             </div>
             
             <div class="card-body">
-                {% if error %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>{{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if form.errors %}
                     <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                        <i class="fas fa-exclamation-circle me-2"></i>Please correct the errors below.
                     </div>
                 {% endif %}
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                     <div class="mb-3">
                         <label for="id_title" class="form-label">Title</label>
                         <input type="text" name="title" id="id_title" 
-                               value="{{ post.title|default_if_none:'' }}"
-                               class="form-control" required>
-                        <div class="form-text">Enter a descriptive title for your post</div>
+                               value="{{ form.title.value|default_if_none:'' }}"
+                               class="form-control {% if form.title.errors %}is-invalid{% endif %}" required>
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.title.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.title.help_text }}</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="id_slug" class="form-label">Slug</label>
                         <input type="text" name="slug" id="id_slug" 
-                               value="{{ post.slug|default_if_none:'' }}"
-                               class="form-control" required>
-                        <div class="form-text">URL-friendly version of the title (e.g., my-post-title)</div>
+                               value="{{ form.slug.value|default_if_none:'' }}"
+                               class="form-control {% if form.slug.errors %}is-invalid{% endif %}" required>
+                        {% if form.slug.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.slug.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.slug.help_text }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_category" class="form-label">Category</label>
+                        <select name="category" id="id_category" class="form-select {% if form.category.errors %}is-invalid{% endif %}">
+                            <option value="">---------</option>
+                            {% for category in form.fields.category.queryset %}
+                                <option value="{{ category.id }}" {% if form.category.value|stringformat:"i" == category.id|stringformat:"i" %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.category.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.category.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.category.help_text }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_featured_image" class="form-label">Featured Image</label>
+                        <input type="file" name="featured_image" id="id_featured_image" 
+                               class="form-control {% if form.featured_image.errors %}is-invalid{% endif %}">
+                        {% if form.featured_image.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.featured_image.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.featured_image.help_text }}</div>
+                        {% if post.featured_image %}
+                            <div class="mt-2">
+                                <p>Current image:</p>
+                                <img src="{{ post.featured_image.url }}" alt="Featured image" class="img-fluid rounded" style="max-height: 150px;">
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_thumbnail" class="form-label">Thumbnail</label>
+                        <input type="file" name="thumbnail" id="id_thumbnail" 
+                               class="form-control {% if form.thumbnail.errors %}is-invalid{% endif %}">
+                        {% if form.thumbnail.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.thumbnail.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.thumbnail.help_text }}</div>
+                        {% if post.thumbnail %}
+                            <div class="mt-2">
+                                <p>Current thumbnail:</p>
+                                <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 100px;">
+                            </div>
+                        {% endif %}
                     </div>
                     
                     <div class="mb-3">
                         <label for="id_content" class="form-label">Content</label>
                         <textarea name="content" id="id_content" rows="10" 
-                                  class="form-control" required>{{ post.content|default_if_none:'' }}</textarea>
+                                  class="form-control {% if form.content.errors %}is-invalid{% endif %}" required>{{ form.content.value|default_if_none:'' }}</textarea>
+                        {% if form.content.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.content.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.content.help_text }}</div>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="id_published_date" class="form-label">Published Date</label>
+                        <input type="date" name="published_date" id="id_published_date" 
+                               value="{{ form.published_date.value|date:'Y-m-d'|default_if_none:'' }}"
+                               class="form-control {% if form.published_date.errors %}is-invalid{% endif %}">
+                        {% if form.published_date.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.published_date.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">{{ form.published_date.help_text }}</div>
+                    </div>
+
                     <div class="mb-4">
                         <label for="id_status" class="form-label">Status</label>
-                        <select name="status" id="id_status" class="form-select">
-                            {% for key, value in status_choices %}
-                                <option value="{{ key }}" {% if post and post.status == key %}selected{% endif %}>
+                        <select name="status" id="id_status" class="form-select {% if form.status.errors %}is-invalid{% endif %}">
+                            {% for key, value in form.fields.status.choices %}
+                                <option value="{{ key }}" {% if form.status.value == key %}selected{% endif %}>
                                     {{ value }}
                                 </option>
                             {% endfor %}
                         </select>
+                        {% if form.status.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.status.errors }}
+                            </div>
+                        {% endif %}
                         <div class="form-text">
                             <span class="text-success">Published</span>: Visible to everyone. 
                             <span class="text-warning">Draft</span>: Not public yet. 

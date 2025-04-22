@@ -28,6 +28,35 @@
                 
                 <button type="submit" class="btn btn-primary">Send Message</button>
             </form>
+            <h1>Rendering Individual Field</h1>
+            <form method='post' novalidate>
+                {% csrf_token %}
+                <!--Render form using loop-->
+                {% for field in form %}
+                    <div class="form-group">
+                        {{field.lable_tag}}
+                        {{field}}
+                        {% if field.errors %}
+                            <div class="error-message text-danger">{{field.errors.0}}</div>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text}}</small>
+                        {% endif %}
+                    </div> 
+                {% endfor %}
+
+                {% comment %} <div class="form-group">
+                    {{form.name.lable_tag}}
+                    {{form.name}}
+                    {% if form.name.errors %}
+                        <div class="error-message text-danger">{{form.name.errors.0}}</div>
+                    {% endif %}
+                    {% if form.name.help_text %}
+                        <small class="help-text">{{ form.name.help_text}}</small>
+                    {% endif %}
+                </div> {% endcomment %}
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
         </div>
         
         <div class="col-md-4">

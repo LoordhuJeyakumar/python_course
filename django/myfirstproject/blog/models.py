@@ -32,7 +32,8 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True ,related_name='posts')
-
+    featured_image = models.ImageField(default='fallback.png', blank=True )
+    thumbnail = models.ImageField(default='fallback_thumbnail.png', blank=True )
     content = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,6 +47,9 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.staus = 'published'
         self.save()
+
+    def clean_title(self):
+        return self.title.strip().capitalize()
     
     class Meta:
         db_table = 'blog_post'
